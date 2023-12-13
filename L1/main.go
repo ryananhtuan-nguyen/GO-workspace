@@ -17,4 +17,9 @@ func main() {
 
 	// nameThree = nameOne
 	fmt.Println(nameOne, nameTwo, nameThree)
+
+	nameOne = "orange"
+	nameThree = "browser"
+
+	fmt.Println(nameOne, nameTwo, nameThree)
 }
