@@ -23,7 +23,15 @@ func main() {
 
 	fmt.Println(nameOne, nameTwo, nameThree)
 
-	nameFour := "Fourth name"
+	nameFour := "Fourth name" //This can NOT be used outside of a function
 
 	fmt.Println(nameFour)
+
+	//ints
+
+	var ageOne int = 20
+	var ageTwo = 30
+	ageThree := 40
+
+	fmt.Println(ageOne, ageTwo, ageThree)
 }
