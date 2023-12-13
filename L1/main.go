@@ -2,6 +2,14 @@ package main
 
 import "fmt"
 
+// func main() {
+// 	fmt.Println("Hello world!")
+// }
+
 func main() {
-	fmt.Println("Hello world!")
+
+	//strings
+	var nameOne string = "mario"
+
+	fmt.Println(nameOne)
 }
