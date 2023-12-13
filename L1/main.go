@@ -22,4 +22,8 @@ func main() {
 	nameThree = "browser"
 
 	fmt.Println(nameOne, nameTwo, nameThree)
+
+	nameFour := "Fourth name"
+
+	fmt.Println(nameFour)
 }
