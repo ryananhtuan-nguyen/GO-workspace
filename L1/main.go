@@ -13,5 +13,8 @@ func main() {
 
 	var nameTwo = "Ryan"
 
-	fmt.Println(nameOne, nameTwo)
+	var nameThree string
+
+	// nameThree = nameOne
+	fmt.Println(nameOne, nameTwo, nameThree)
 }
