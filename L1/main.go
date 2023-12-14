@@ -36,8 +36,12 @@ func main() {
 	fmt.Println(ageOne, ageTwo, ageThree)
 
 	//bits and memory
-	var numOne int8 = 25
-	var numTwo int8 = -128
-	var numThree uint8 = 225
+	// var numOne int8 = 25
+	// var numTwo int8 = -128
+	// var numThree uint8 = 225
+
+	//FLOAT
+	var scoreOne float32 = -22.5
+	var scoreTwo float64 = 32487234982374.092382487
 
 }
