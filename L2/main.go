@@ -27,4 +27,8 @@ func main() {
 	//%f FLOAT
 	fmt.Printf("You scored %0.1f points! \n", 225.55)
 
+	//Sprintf (save formatted strings)
+	var str = fmt.Sprintf("My age is %v and my name is %v \n", age, name)
+	fmt.Println("The saved string is:", str)
+
 }
