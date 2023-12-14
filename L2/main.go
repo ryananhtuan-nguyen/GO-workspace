@@ -16,4 +16,8 @@ func main() {
 	// fmt.Println("Bye !")
 
 	fmt.Println("My age is", age, "and my name is", name)
+
+	//Printf ( formatted strings )
+	fmt.Printf("My age is %v and my name is %v", age, name)
+
 }
