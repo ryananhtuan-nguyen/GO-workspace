@@ -17,7 +17,14 @@ func main() {
 
 	fmt.Println("My age is", age, "and my name is", name)
 
-	//Printf ( formatted strings )
-	fmt.Printf("My age is %v and my name is %v", age, name)
+	//Printf ( formatted strings )  %_ = format specifier
+	//%v for variable
+	fmt.Printf("My age is %v and my name is %v \n", age, name)
+	//%q string
+	fmt.Printf("My age is %q and my name is %q \n", age, name)
+	//%T type
+	fmt.Printf("Age is of type %T \n", age)
+	//%f FLOAT
+	fmt.Printf("You scored %0.1f points! \n", 225.55)
 
 }
