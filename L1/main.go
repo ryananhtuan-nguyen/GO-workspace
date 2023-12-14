@@ -41,8 +41,8 @@ func main() {
 	// var numThree uint8 = 225
 
 	//FLOAT
-	var scoreOne float32 = -22.5
-	var scoreTwo float64 = 32487234982374.092382487
-	scoreThree := 1.5
+	// var scoreOne float32 = -22.5
+	// var scoreTwo float64 = 32487234982374.092382487
+	// scoreThree := 1.5
 
 }
