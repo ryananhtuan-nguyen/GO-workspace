@@ -18,6 +18,17 @@ func main() {
 	// }
 
 	//LOOPING THROUGH SLICES
-	name := []string{"mario", "moria", "yoda", "watermelon"}
-	fmt.Println(name)
+
+	names := []string{"mario", "moria", "yoda", "watermelon"}
+
+	//traditional For
+	for i := 0; i < len(names); i++ {
+		fmt.Println(names[i])
+
+	}
+
+	//for...in like js
+	for index, value := range names {
+		fmt.Printf("Value at index %v is %v \n", index, value)
+	}
 }
