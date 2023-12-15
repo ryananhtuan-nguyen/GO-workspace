@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 func sayGreeting(n string) {
 	fmt.Printf("Greetings, %v\n", n)
@@ -16,13 +19,24 @@ func cycleNames(n []string, f func(string)) {
 	}
 }
 
+func circleAre(r float64) float64 {
+	return math.Pi * r * r
+}
+
 func main() {
 
-	sayGreeting("Mario")
-	sayGreeting("Luigi")
+	// sayGreeting("Mario")
+	// sayGreeting("Luigi")
 
-	sayBye("Mario")
+	// sayBye("Mario")
 
 	cycleNames([]string{"Cloud", "Sun", "Moon"}, sayGreeting)
+	cycleNames([]string{"Cloud", "Sun", "Moon"}, sayBye)
+
+	a1 := circleAre(10.5)
+	a2 := circleAre(15)
+
+	fmt.Println(a1, a2)
+	fmt.Printf("Circle 1 is %0.3f and circle2 is %0.3f \n", a1, a2)
 
 }
