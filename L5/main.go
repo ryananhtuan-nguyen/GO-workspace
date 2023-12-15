@@ -28,7 +28,15 @@ func main() {
 	}
 
 	//for...in like js
+	//switch variable to _ if not needed
+	//for _, value
 	for index, value := range names {
 		fmt.Printf("Value at index %v is %v \n", index, value)
+
+		//THIS WONT UPDATE REAL VALUE
+		value = "something"
 	}
+
+	fmt.Println(names)
+
 }
