@@ -25,6 +25,10 @@ func main() {
 			fmt.Println("Continuing at pos", index)
 			continue
 		}
+		if index > 2 {
+			fmt.Println("Breaking at pos", index)
+			break
+		}
 
 		fmt.Printf("The value at pos %v is %v \n", index, value)
 
