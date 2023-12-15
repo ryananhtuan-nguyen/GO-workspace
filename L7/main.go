@@ -9,11 +9,20 @@ func sayGreeting(n string) {
 func sayBye(n string) {
 	fmt.Printf("Bye, %v\n", n)
 }
+
+func cycleNames(n []string, f func(string)) {
+	for _, v := range n {
+		f(v)
+	}
+}
+
 func main() {
 
 	sayGreeting("Mario")
 	sayGreeting("Luigi")
 
 	sayBye("Mario")
+
+	cycleNames([]string{"Cloud", "Sun", "Moon"}, sayGreeting)
 
 }
