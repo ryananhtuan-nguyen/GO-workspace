@@ -1,9 +1,15 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
+
+var scores = 99.5
 
 func main() {
-	fmt.Println("Hello world")
+	sayHello("Maria")
+
+	for _, v := range points {
+		fmt.Println(v)
+	}
+
+	showScore()
 }
