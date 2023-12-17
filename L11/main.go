@@ -11,6 +11,7 @@ func updateName(x string) {
 func main() {
 	name := "tifa"
 
+	//This will NOT change value of name
 	updateName(name)
 
 	fmt.Println(name)
