@@ -31,8 +31,22 @@ func (b bill) format() string {
 		fs += fmt.Sprintf("%-25v ...$%v \n", k+":", v)
 		total += v
 	}
+	//add tip
+	fs += fmt.Sprintf("%-25v ...$%v\n", "Tip:", b.tip)
 	//total
-	fs += fmt.Sprintf("%-25v ...$%0.2f", "Total:", total)
+	fs += fmt.Sprintf("%-25v ...$%0.2f", "Total:", total+b.tip)
 
 	return fs
+}
+
+//add tip
+
+func (b *bill) updateTip(tip float64) {
+	b.tip = tip
+}
+
+//add item to the bill
+
+func (b *bill) addItem(name string, price float64) {
+	b.items[name] = price
 }
