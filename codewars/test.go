@@ -2,132 +2,119 @@ package main
 
 import (
 	"encoding/csv"
-	"encoding/json"
 	"fmt"
-	"io"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 	"strings"
 )
 
-// Custom struct for CSV record
-type MyData struct {
+// AllFarm represents a list of farms
+type AllFarm []struct {
 	FarmID  string
 	TowerID string
 	RSSI    float64
 }
 
-func getApiLinks(s string) ([]string, error) {
-	// GET request to fetch api links
-	response, err := http.Get(s)
+// BestTower represents the best tower with its average RSSI
+type BestTower struct {
+	TowerID     string
+	AverageRSSI float64
+}
+
+// convertCSVtoJSON converts CSV data to JSON
+func convertCSVtoJSON(csvData string) (AllFarm, error) {
+	reader := csv.NewReader(strings.NewReader(csvData))
+	records, err := reader.ReadAll()
 	if err != nil {
-		// Return an error if failed to fetch
-		return nil, fmt.Errorf("failed to fetch API link: %v", err)
+		fmt.Println(csvData)
+		return nil, err
+	}
+
+	var jsonData AllFarm
+	for _, record := range records {
+		rssi, err := strconv.ParseFloat(record[2], 64)
+		if err != nil {
+			return nil, err
+		}
+		jsonData = append(jsonData, struct {
+			FarmID  string
+			TowerID string
+			RSSI    float64
+		}{record[0], record[1], rssi})
+	}
+
+	return jsonData, nil
+}
+
+// fetchData fetches data from the given API URL
+func fetchData(apiURL string) (AllFarm, error) {
+	response, err := http.Get(apiURL)
+	if err != nil {
+		return nil, err
 	}
 	defer response.Body.Close()
 
-	// Check the HTTP status code
 	if response.StatusCode != http.StatusOK {
-		// Return an error if the status code indicates a problem
-		return nil, fmt.Errorf("failed to fetch API link, status code: %d", response.StatusCode)
+		return nil, fmt.Errorf("Failed to fetch data from %s", apiURL)
 	}
 
-	// Read the response body
-	body, err := io.ReadAll(response.Body)
+	csvData, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		// Return an error if the body is invalid
-		return nil, fmt.Errorf("failed to read response body: %v", err)
+		fmt.Println("Error reading CSV:", err)
 	}
 
-	// Parse JSON array of URLs
-	var links []string
-	err = json.Unmarshal(body, &links)
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse JSON array: %v", err)
-	}
-
-	return links, nil
+	return convertCSVtoJSON(string(csvData))
 }
 
-func fetchData() ([]MyData, []string, error) {
-	linksApiEndpoint := "https://api.onizmx.com/lambda/tower_stream"
-
-	links, err := getApiLinks(linksApiEndpoint)
+// findBestTowerByFarmID finds the best tower for a given farm ID
+func findBestTowerByFarmID(farmID string) (*BestTower, error) {
+	apiURL := "https://api.onizmx.com/lambda/tower_stream"
+	allData, err := fetchData(apiURL)
 	if err != nil {
-		fmt.Println("Error fetching links:", err)
-		return nil, nil, err
+		return nil, err
 	}
-	var failedLinks []string
 
-	var allData []MyData
+	var bestTower BestTower
+	towers := make(map[string][]float64)
 
-	// Make a GET request to each API link
-	for _, link := range links {
-		response, err := http.Get(link)
-		if err != nil {
-			fmt.Println("Error making the request:", err)
-			failedLinks = append(failedLinks, link)
-			continue
+	// Filter data for the given farm ID
+	for _, item := range allData {
+		if item.FarmID == farmID {
+			towers[item.TowerID] = append(towers[item.TowerID], item.RSSI)
 		}
-		defer response.Body.Close()
-
-		if response.StatusCode != http.StatusOK {
-			fmt.Printf("Error fetching CSV from %s: Status code %d\n", link, response.StatusCode)
-			failedLinks = append(failedLinks, link)
-			response.Body.Close()
-			continue
-		}
-
-		// Create a CSV reader
-		csvReader := csv.NewReader(response.Body)
-		csvReader.LazyQuotes = true
-
-		// Skip the header row
-		_, err = csvReader.Read()
-		if err != nil {
-			fmt.Println("Error reading CSV header:", err)
-			continue
-		}
-
-		// Initialize a slice to store parsed data
-		var data []MyData
-
-		// Read the rest of the CSV records
-		for {
-			record, err := csvReader.Read()
-			if err == io.EOF {
-				break
-			} else if err != nil {
-				fmt.Println("Error reading CSV:", err)
-				continue
-			}
-
-			// Ensure the record has at least 3 columns
-			if len(record) < 3 {
-				fmt.Println("Invalid CSV record:", record)
-				continue
-			}
-
-			// Parse CSV record and create MyData object
-			myData := MyData{
-				FarmID:  record[0],
-				TowerID: record[1],
-			}
-
-			// Parse RSSI field as float64
-			rssi, err := strconv.ParseFloat(strings.TrimSpace(record[2]), 64)
-			if err != nil {
-				fmt.Printf("Error parsing RSSI for record %v: %v\n", record, err)
-				continue // Skip this record if RSSI parsing fails
-			}
-			myData.RSSI = rssi
-
-			// Append MyData object to the slice
-			data = append(data, myData)
-		}
-
-		// Access data as needed, for example:
-		allData = append(allData, data...)
 	}
-	return allData, failedLinks, nil
+
+	// Calculate average RSSI for each tower
+	for towerID, rssis := range towers {
+		var sum float64
+		for _, rssi := range rssis {
+			sum += rssi
+		}
+		averageRSSI := sum / float64(len(rssis))
+		towers[towerID] = []float64{averageRSSI}
+	}
+
+	// Find the tower with the highest average RSSI
+	var maxAverageRSSI float64
+	for towerID, averageRSSI := range towers {
+		if averageRSSI[0] > maxAverageRSSI {
+			maxAverageRSSI = averageRSSI[0]
+			bestTower.TowerID = towerID
+			bestTower.AverageRSSI = maxAverageRSSI
+		}
+	}
+
+	return &bestTower, nil
+}
+
+func main() {
+	farmID := "yourFarmID" // Replace with the actual farm ID
+	result, err := findBestTowerByFarmID(farmID)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	fmt.Printf("Best Tower: %+v\n", result)
 }
