@@ -8,3 +8,12 @@ func EvenOrOdd(number int) string {
 	}
 	return "Odd"
 }
+
+/* BITWISE
+package kata
+
+func EvenOrOdd(number int) string {
+  return []string{"Even", "Odd"}[number & 1]
+}
+
+*/
