@@ -28,3 +28,35 @@ func SquareOrSquareRoot(arr []int) []int {
 
 	return results
 }
+
+//NOTE:
+// It appears that the issue lies in the comparison of floating-point numbers. When dealing with floating-point arithmetic, small rounding errors may occur, leading to differences in the expected and actual results.
+//Another way to do this
+/*
+
+package kata
+
+import "math"
+
+const epsilon = 1e-9
+
+func SquareOrSquareRoot(arr []int) []int {
+	var result []int
+
+	if arr == nil {
+		return result
+	}
+
+	for _, v := range arr {
+		squareRoot := math.Sqrt(float64(v))
+		if math.Abs(squareRoot-math.Trunc(squareRoot)) < epsilon {
+			result = append(result, int(squareRoot))
+		} else {
+			result = append(result, v*v)
+		}
+	}
+
+	return result
+}
+
+*/
