@@ -13,4 +13,17 @@ func main() {
 	// PI := 123
 
 	fmt.Println(PI)
+
+	//uintptr - Unsigned Int Pointer
+
+	/*
+		key-value
+		key = uintptr -> value
+		map<key,object>
+		value = object(*point)
+
+		key=(*point) -> utintptr
+		map.put(key, value)
+		List of address, each address points to a value.
+	*/
 }
