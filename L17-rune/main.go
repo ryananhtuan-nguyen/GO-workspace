@@ -18,6 +18,8 @@ func main() {
 
 	fmt.Println("============")
 	var mRune rune = '🔴'
-	fmt.Printf("%c", mRune)
+	// fmt.Printf("%c", mRune)
+	//unicode
+	fmt.Printf("%c - %U", mRune, mRune)
 
 }
