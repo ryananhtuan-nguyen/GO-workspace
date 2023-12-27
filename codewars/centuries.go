@@ -17,3 +17,11 @@ import "math"
 func century(year int) int {
 	return int(math.Ceil(float64(year) / 100))
 }
+
+/*Best solution so far
+package kata
+
+func century(year int) int {
+	return (year + 99)/100
+}
+*/
